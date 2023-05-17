@@ -32,9 +32,12 @@ if (isset($_SESSION['auth'])) {
         header("Location: Teste.php"); // Redireciona para a página de login após o logout
         exit();
     }
+    if (isset($_POST['signin'])) {
+        header("Location: Form.php"); // Redireciona para a página de login após o logout
+        exit();
+    }
 }
 if (!$auth) {
-    /* Show the login form */
     ?>
 
         Please login:<br>
@@ -42,6 +45,7 @@ if (!$auth) {
             <input type="text" name="user">
             <input type="password" name="passwd">
             <input type="submit" value="Log-in">
+            <input type="submit" name="signin" value="Sign-in">
         </form>
         <?php
 }
