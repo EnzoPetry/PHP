@@ -10,20 +10,9 @@ $auth = FALSE;
 /* Check the Session array to see if this client is already authenticated */
 if (isset($_SESSION['auth'])) {
     $auth = TRUE;
+    echo "<p>Login successful<p>";
     header("Location: Teste.php"); // Redireciona para a página de login após o logout
     exit();
-}
-if (!$auth) {
-    ?>
-
-    Please login:<br>
-    <form method="POST">
-        <input type="text" name="user">
-        <input type="password" name="passwd">
-        <input type="submit" name="login" value="Log-in">
-        <input type="submit" value="Sign-in">
-    </form>
-    <?php
 }
 $user = '';
 $passwd = '';
@@ -47,12 +36,23 @@ if (isset($_POST['login'])) {
         if ($stmt->rowCount() > 0) {
             echo "<p>Autenticação bem-sucedida.</p>";
             $_SESSION['auth'] = TRUE;
-            sleep(2);
         } else {
             echo "<p>Usuário ou senha inválidos.</p>";
             session_unset();
-            exit();
         }
+        
     }
+}
+if (!$auth) {
+    ?>
+
+    Please login:<br>
+    <form method="POST">
+        <input type="text" name="user">
+        <input type="password" name="passwd">
+        <input type="submit" name="login" value="Log-in">
+        <input type="submit" value="Sign-in">
+    </form>
+    <?php
 }
 ?>
