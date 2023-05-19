@@ -12,45 +12,7 @@ if (isset($_SESSION['auth'])) {
     $auth = TRUE;
     header("Location: Teste.php"); // Redireciona para a página de login após o logout
     exit();
-} 
-$user = '';
-$passwd = '';
-
-if (isset($_POST['user'])) {
-    $username = $_REQUEST['user'];
 }
-if (isset($_POST['passwd'])) {
-    $password = $_REQUEST['passwd'];
-}
-    /* Check the request string for user and password */
-
-
-        $sql = "SELECT * FROM users WHERE user_name = $user AND password = $passwd";
-        if (mysqli_query($conn, $sql)) {
-            echo "New record created successfully";
-            session_unset();
-            header("Location: Login.php"); // Redireciona para a página de login após o logout
-            exit();
-        } else {
-            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-        }
-        mysqli_close($conn);
-        
-
-        /* Example authentication */
-        if ($stmt->rowsCount() > 0) {
-            echo "Senha Certa";
-
-            $auth = TRUE;
-            $_SESSION['auth'] = TRUE;
-            header("Location: Teste.php"); // Redireciona para a página de login após o logout
-            exit();
-
-        } else {
-            echo "Senha Errada";
-        }
-
-
 if (!$auth) {
     ?>
 
@@ -62,5 +24,35 @@ if (!$auth) {
         <input type="submit" value="Sign-in">
     </form>
     <?php
+}
+$user = '';
+$passwd = '';
+
+if (isset($_POST['user'])) {
+    $username = $_REQUEST['user'];
+}
+if (isset($_POST['passwd'])) {
+    $password = $_REQUEST['passwd'];
+}
+/* Check the request string for user and password */
+if (isset($_POST['login'])) {
+
+    if (!empty($username) && !empty($password)) {
+        $sql = "SELECT * FROM users WHERE user_name = ? AND password = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(1, $username);
+        $stmt->bindParam(2, $password);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            echo "<p>Autenticação bem-sucedida.</p>";
+            $_SESSION['auth'] = TRUE;
+            sleep(2);
+        } else {
+            echo "<p>Usuário ou senha inválidos.</p>";
+            session_unset();
+            exit();
+        }
+    }
 }
 ?>
